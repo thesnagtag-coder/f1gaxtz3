@@ -129,6 +129,17 @@ nav.side{position:sticky;top:78px;align-self:start}
 .pager{display:flex;justify-content:space-between;gap:10px;margin-top:28px;flex-wrap:wrap}
 .foot{color:var(--soft);font-size:.8rem;text-align:center;margin-top:28px;grid-column:1/-1}
 
+/* Share */
+.shr{display:flex;flex-direction:column;gap:12px}
+.shr-i{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg)}
+.shr-i .hint{margin:4px 0 0}
+.shr-sel{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--paper);min-height:40px;max-width:100%}
+.shr-how{font-size:.8rem}
+.shr-h{margin:0 0 4px;font-family:var(--serif)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.copynote{margin:0 0 14px}
+dialog{max-height:calc(100vh - 32px);overflow:auto}
+
 /* Modal */
 dialog{border:0;border-radius:16px;padding:0;max-width:520px;width:calc(100% - 32px);background:var(--paper);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.4)}
 dialog::backdrop{background:rgba(27,24,36,.45)}
@@ -210,11 +221,13 @@ dialog::backdrop{background:rgba(27,24,36,.45)}
   .pchk .bx{display:inline-block;width:4mm;height:4mm;border:1pt solid #333;margin-right:2.5mm;vertical-align:-.6mm;text-align:center;line-height:3.6mm;font-size:8pt}
   .pchk small{color:#555;display:block;margin-left:6.5mm}
   .pnote{border-left:2.5pt solid #E3A72F;background:#FBF0D6;padding:2mm 3mm;font-size:9pt;margin:2mm 0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pcard{border:.6pt solid #999;border-radius:2mm;padding:1mm 2mm;margin:0 0 3mm;page-break-inside:avoid;break-inside:avoid}
+  .pcard .pkv{margin:0}
   .pfoot{font-size:7.5pt;color:#666;margin-top:5mm;border-top:.5pt solid #ccc;padding-top:2mm}
-  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
-  .pbox{border:.8pt solid #999;border-radius:2mm;padding:3mm;page-break-inside:avoid}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+  .pbox{border:.8pt solid #999;border-radius:2mm;padding:2.2mm 2.6mm;page-break-inside:avoid}
   .pbox h4{margin:0 0 1.5mm;font-family:var(--serif);font-size:11pt}
-  .pbox p,.pbox li{font-size:9.5pt;margin:0}
+  .pbox p,.pbox li{font-size:9pt;margin:0;line-height:1.35}
 }
 </style>
 </head>
@@ -231,7 +244,7 @@ dialog::backdrop{background:rgba(27,24,36,.45)}
     <div class="tools">
       <button class="btn cor" id="bTonight" title="Open Find It Fast"><span aria-hidden="true">&#9906;</span><span class="lbl">Find<span class="lp"> It Fast</span></span></button>
       <button class="btn" id="bPrint" title="Print your file"><span aria-hidden="true">&#9113;</span><span class="lbl">Print</span></button>
-      <button class="btn" id="bBackup" title="Backup and restore"><span aria-hidden="true">&#8681;</span><span class="lbl">Backup</span></button>
+      <button class="btn" id="bBackup" title="Share, save as PDF and backup"><span aria-hidden="true">&#8679;</span><span class="lbl">Share<span class="lp"> &amp; Backup</span></span></button>
       <button class="btn" id="bSettings" title="Personalise"><span aria-hidden="true">&#9881;</span><span class="lbl">Personalise</span></button>
     </div>
   </div>
@@ -267,7 +280,31 @@ dialog::backdrop{background:rgba(27,24,36,.45)}
 
 <dialog id="dBackup" aria-labelledby="dbT">
   <div class="dlg">
-    <h3 id="dbT">Backup and restore</h3>
+    <h3 id="dbT">Share and backup</h3>
+    <div class="shr">
+      <div class="shr-i">
+        <b>&#128196; Save as PDF</b>
+        <p class="hint">A finished copy anyone can read on any phone or computer. Best for your family to keep.</p>
+        <div class="row" style="justify-content:flex-start;margin-top:8px">
+          <label for="pdfScope" class="sr">What to save</label>
+          <select id="pdfScope" class="shr-sel"><option value="all">The whole file</option><option value="tonight">The summary page only</option></select>
+          <button class="btn pri" id="bPdf">Save as PDF</button>
+        </div>
+        <p class="hint shr-how">On the next screen: <b>Android or computer</b> - choose "Save as PDF" as the printer, then tap Save or the download button. <b>iPhone</b> - tap the Share icon (a box with an arrow pointing up), then "Save to Files".</p>
+      </div>
+      <div class="shr-i">
+        <b>&#128228; Send a filled copy</b>
+        <p class="hint">One file with everything already filled in. Send it on WhatsApp or email. The person opens it and sees it all, and can keep adding. For Android phones and computers.</p>
+        <div class="row" style="justify-content:flex-start;margin-top:8px"><button class="btn pri" id="bCopy">Save a filled copy</button></div>
+      </div>
+      <div class="shr-i">
+        <b>&#63743; Send to an iPhone (ZIP)</b>
+        <p class="hint">The same filled copy, packed in a ZIP with simple iPhone steps inside. iPhones block buttons in files opened straight from WhatsApp, so use this one for iPhones and iPads.</p>
+        <div class="row" style="justify-content:flex-start;margin-top:8px"><button class="btn pri" id="bZip">Save iPhone ZIP</button></div>
+      </div>
+    </div>
+    <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+    <h4 class="shr-h">Backup and restore</h4>
     <p class="hint">Your file lives only in this browser. If the browser data is cleared, it is gone. Save a backup file after each drawer and keep a copy somewhere safe (a USB stick or your own cloud storage).</p>
     <div class="row" style="justify-content:flex-start">
       <button class="btn pri" id="bExport">&#8681; Save backup file</button>
@@ -308,6 +345,10 @@ dialog::backdrop{background:rgba(27,24,36,.45)}
 "use strict";
 var KEY="tst_drawer_file_v1";
 var VERSION=1;
+var PRISTINE="<!DOCTYPE html>\n"+document.documentElement.outerHTML;
+var FILLED=null;
+try{var fdEl=document.getElementById("filledData");if(fdEl)FILLED=JSON.parse(fdEl.textContent);}catch(e){FILLED=null;}
+if(FILLED&&FILLED.copyId)KEY=KEY+"_copy_"+String(FILLED.copyId).replace(/[^a-z0-9]/gi,"");
 
 /* ---------- Content schema ---------- */
 var REL=["Partner / spouse","Child","Parent","Sibling","Friend","Neighbour","Colleague","Other family","Other"];
@@ -317,17 +358,23 @@ var S=[
 {id:"tonight",n:"",title:"Find It Fast",tab:"The map",lead:"Built automatically from every drawer. Everything you recorded, sorted by where it is kept. Your family starts here.",custom:"tonight"},
 {id:"s1",n:1,title:"The Drawer Card",tab:"Drawer 1",lead:"The one card that lives in your kitchen drawer: who you are, who to call and the health basics. Print it and keep it where anyone would look first.",groups:[
  {g:"fields",title:"Who lives here",fields:[
-  {k:"fullName",l:"Full legal name"},{k:"mobile",l:"My mobile number",t:"tel"},
+  {k:"fullName",l:"Full legal name"},{k:"mobile",l:"My mobile number",t:"tel"},{k:"country",l:"Country I live in"},
   {k:"address",l:"Home address",w:1,t:"textarea",sub:"Write it in full. Visitors and carers may need to give it to emergency services."},
   {k:"emergNo",l:"Emergency number where I live",sub:"For example 112 in the EU, 911 in the US and Canada, 999 in the UK. Check the number for your country."},
   {k:"dob",l:"Date of birth",t:"date"}
  ]},
- {g:"fields",title:"My partner",show:"partner",fields:[
-  {k:"pName",l:"Partner's full legal name"},{k:"pDob",l:"Partner's date of birth",t:"date"},
-  {k:"pMobile",l:"Partner's mobile",t:"tel"},{k:"pWork",l:"Partner's work contact"}
+ {g:"list",key:"fam",title:"More people in this file",hint:"Add your partner, a parent or grown children. Each person gets their own card on the summary page, and on the printed copy.",add:"Add a person",lab:"Person",fields:[
+  {k:"name",l:"Full name"},{k:"rel",l:"Relationship to me",t:"select",o:REL},
+  {k:"dob",l:"Date of birth",t:"date"},{k:"mobile",l:"Mobile",t:"tel"},
+  {k:"country",l:"Country they live in"},{k:"idLoc",l:"Where their ID and passport are kept",sub:"The place, not the numbers."},
+  {k:"blood",l:"Blood type",t:"select",o:["Not sure","A+","A-","B+","B-","AB+","AB-","O+","O-"]},{k:"allergies",l:"Allergies and reactions"},
+  {k:"conditions",l:"Ongoing health conditions",w:1,t:"textarea"},
+  {k:"meds",l:"Medicines, copied from the labels",w:1,t:"textarea",sub:"Name, strength and when taken. A record, not dosing advice."},
+  {k:"gp",l:"Their doctor and phone"},{k:"insurer",l:"Medical aid / health cover, and where the card is"}
  ]}, {g:"list",key:"callOrder",title:"Call these people, in this order",hint:"Put the calmest, most organised person first, not only the closest.",add:"Add a person",lab:"Person",fields:[
   {k:"name",l:"Name"},{k:"rel",l:"Relationship",t:"select",o:REL},
-  {k:"phone",l:"Phone",t:"tel"},{k:"helps",l:"What they can help with",sub:"e.g. fetch the kids, speak to doctors, feed the dog"}
+  {k:"phone",l:"Phone",t:"tel"},{k:"helps",l:"What they can help with",sub:"e.g. fetch the kids, speak to doctors, feed the dog"},
+  {k:"country",l:"Country and time zone",sub:"e.g. Australia, 6 hours ahead of me"}
  ]},
  {g:"fields",title:"Health basics",fields:[
   {k:"blood",l:"Blood type",t:"select",o:["Not sure","A+","A-","B+","B-","AB+","AB-","O+","O-"]},
@@ -344,6 +391,11 @@ var S=[
   {k:"spot",l:"Exact spot",sub:"e.g. blue file, top shelf, left side"},
   {k:"kind",l:"Original or copy",t:"select",o:["Original","Copy","Original and a copy","Not sure"]},
   {k:"who",l:"Who else knows where it is"}
+ ]},
+ {g:"list",key:"wills",title:"Wills and legal papers, by country",hint:"With money, property or family in more than one country, you may need papers in each. Add one row per document. A lawyer in each country can tell you what is needed.",add:"Add a document",lab:"Document",fields:[
+  {k:"country",l:"Country"},{k:"kind",l:"Document",t:"select",o:["Will","Power of attorney","Advance directive / living will","Other"]},
+  {k:"place",l:"Kept in",t:"select",o:PLACES},{k:"spot",l:"Exact spot"},
+  {k:"lawyer",l:"Lawyer or notary, and phone"}
  ]}
 ]},
 {id:"s3",n:3,title:"Medicines and First Aid",tab:"Drawer 3",lead:"What you take, and where the medicines and first aid things are kept in the house.",groups:[
@@ -386,14 +438,18 @@ var S=[
  {g:"list",key:"banks",title:"Accounts",add:"Add an account",lab:"Account",fields:[
   {k:"inst",l:"Bank or provider"},{k:"type",l:"Type",t:"select",o:["Everyday / current","Savings","Credit card","Investment","Retirement / pension","Loan or bond","Online wallet","Other"]},
   {k:"last4",l:"Last 4 digits only",mx:4},{k:"whose",l:"Whose",t:"select",o:["Mine","My partner's","Joint","Business"]},
-  {k:"contact",l:"Phone or branch to call",w:1}
+  {k:"country",l:"Country"},{k:"contact",l:"Phone or branch to call",w:1}
  ]}, {g:"list",key:"bills",title:"Bills and automatic payments",hint:"Before anyone cancels a card or closes an account, they need this list. Otherwise payments bounce.",add:"Add a bill",lab:"Bill",fields:[
   {k:"what",l:"What it is"},{k:"from",l:"Paid from (account last 4)"},
   {k:"how",l:"How it is paid",t:"select",o:["Debit order","Card","Manual / online","Cash"]},{k:"day",l:"Day of the month"}
  ]}, {g:"list",key:"policies",title:"Insurance and cover",hint:"Include cover that comes with your job, your bank account or your credit card. These are the easiest to forget.",add:"Add a policy",lab:"Policy",fields:[
   {k:"ins",l:"Insurer"},{k:"type",l:"Type",t:"select",o:["Life","Funeral","Disability / income protection","Dread / critical illness","Medical","Home and contents","Car","Travel","Other"]},
   {k:"via",l:"Taken out through",t:"select",o:["Myself","My employer","My bank or card","Other"]},{k:"ben",l:"Who benefits"},
-  {k:"loc",l:"Policy number, or where the document is",w:1}
+  {k:"country",l:"Country"},{k:"loc",l:"Policy number, or where the document is",w:1}
+ ]}, {g:"list",key:"property",title:"Property and vehicles",add:"Add property",lab:"Property",fields:[
+  {k:"what",l:"What",sub:"e.g. house, flat, plot, car"},{k:"addr",l:"Address or description"},
+  {k:"country",l:"Country"},{k:"owners",l:"Whose name it is in"},
+  {k:"papers",l:"Where the papers are kept",w:1}
  ]}
 ]},
 {id:"s7",n:7,title:"Phones, Laptops and Logins",tab:"Drawer 7",lead:"Where your devices live, how your family could unlock them, and which accounts matter, without a single password written here.",groups:[
@@ -433,6 +489,11 @@ var S=[
   ["Walk through the house and check every place in Find It Fast is still right"],["Phone numbers on the Drawer Card still correct"],
   ["Medicines list matches the current labels"],["Smoke and carbon monoxide alarms tested","Follow the maker's instructions."],
   ["Spare keys still with the right people"],["New backup file saved"],["Fresh Drawer Card printed and the old one destroyed safely"]
+ ]},
+ {g:"list",key:"notify",title:"Who to notify",hint:"Organisations to tell if something happens. Write where the reference or member number is kept.",add:"Add an organisation",lab:"Organisation",fields:[
+  {k:"type",l:"Type",t:"select",o:["Pension or retirement fund","Tax office","Medical aid / health insurer","Bank","Social security or state pension","Insurer","Former employer","Municipality or council","Other"]},
+  {k:"name",l:"Name"},{k:"phone",l:"Phone or website"},
+  {k:"ref",l:"Where the reference number is kept"},{k:"country",l:"Country"}
  ]}
 ]}
 ];
@@ -440,8 +501,16 @@ var S=[
 /* ---------- State ---------- */
 var st={v:VERSION,settings:{name:"",forWhom:"me",paper:"A4",text:"16",theme:"light"},f:{},l:{},c:{},cn:{},meta:{}};
 function load(){
-  try{var raw=localStorage.getItem(KEY);if(raw){var d=JSON.parse(raw);merge(d);}}catch(e){}
-  seedLists();
+  var got=false;
+  try{var raw=localStorage.getItem(KEY);if(raw){var d=JSON.parse(raw);merge(d);got=true;}}catch(e){}
+  if(!got&&FILLED&&FILLED.data)merge(JSON.parse(JSON.stringify(FILLED.data)));
+  migrate();seedLists();
+}
+function migrate(){
+  var f=st.f;
+  if((f.pName||f.pMobile||f.pBlood||f.pAllergies||f.pConditions||f.pMeds)&&!(st.l.fam&&st.l.fam.length)){
+    st.l.fam=[{name:f.pName||"",rel:"Partner / spouse",dob:f.pDob||"",mobile:f.pMobile||"",blood:f.pBlood||"",allergies:f.pAllergies||"",conditions:f.pConditions||"",meds:f.pMeds||""}];
+  }
 }
 function merge(d){
   if(!d||typeof d!=="object")return;
@@ -453,14 +522,18 @@ function seedLists(){
     if(g.g==="list"&&g.seed&&!st.l[g.key]){st.l[g.key]=g.seed.map(function(x){return {item:x,loc:""};});}
   });});
 }
-var tSave;
+var tSave,pending=false;
+function writeNow(){
+  pending=false;clearTimeout(tSave);
+  try{localStorage.setItem(KEY,JSON.stringify(st));flash("Saved");}catch(e){flash("Not saved - storage blocked");}
+}
 function save(){
-  clearTimeout(tSave);
-  tSave=setTimeout(function(){
-    try{localStorage.setItem(KEY,JSON.stringify(st));flash("Saved");}catch(e){flash("Not saved - storage blocked");}
-  },350);
+  clearTimeout(tSave);pending=true;
+  tSave=setTimeout(writeNow,350);
   updateProgress();
 }
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"&&pending)writeNow();});
+window.addEventListener("pagehide",function(){if(pending)writeNow();});
 function flash(t){var el=$("saved");el.textContent=t;clearTimeout(el._t);el._t=setTimeout(function(){el.textContent="";},1800);}
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
@@ -556,7 +629,7 @@ function pager(){
 function render(){
   var sec=S.find(function(s){return s.id===cur;})||S[0];
   var body=sec.custom==="start"?startHTML():sec.custom==="tonight"?tonightHTML():(sec.groups.map(groupHTML).join(""));
-  $("view").innerHTML='<div class="folder"><span class="tab">'+esc(sec.tab)+'</span><div class="sheet"><h2>'+esc(sec.title)+'</h2>'+(sec.lead?'<p class="lead">'+esc(sec.lead)+'</p>':'')+body+pager()+'</div></div>';
+  $("view").innerHTML=copyNote()+'<div class="folder"><span class="tab">'+esc(sec.tab)+'</span><div class="sheet"><h2>'+esc(sec.title)+'</h2>'+(sec.lead?'<p class="lead">'+esc(sec.lead)+'</p>':'')+body+pager()+'</div></div>';
 }
 function startHTML(){
   var nm=st.settings.name?esc(st.settings.name):"Your family file";
@@ -572,12 +645,27 @@ function startHTML(){
 }
 function v(k){var x=String(st.f[k]||"").trim();return x?esc(x):'<span class="miss">not filled in yet</span>';}
 function fmtDate(d){if(!d)return "";try{var p=d.split("-");return p[2]+"/"+p[1]+"/"+p[0]+" (dd/mm/yyyy)";}catch(e){return d;}}
-var FIND_LISTS=[["docs","item"],["meds","name"],["aid","item"],["keys","item"],["moneyPlaces","item"],["devices","item"]];
+var SECWORD="Drawer";
+function secOf(key){var r=null;S.forEach(function(sec){(sec.groups||[]).forEach(function(g){if(!r&&(g.key===key||(g.fields&&g.g==="fields"&&g.fields.some(function(f){return f.k===key;}))))r=sec;});});return r;}
+function secLabel(key){var c=secOf(key);if(!c)return "";return (c.day?"Day "+c.day+": ":c.n?SECWORD+" "+c.n+": ":"")+c.title;}
+function grp(key){var r=null;S.forEach(function(sec){(sec.groups||[]).forEach(function(g){if(g.key===key)r=g;});});return r;}
+var ME={g:"fields",title:"Me",fields:[
+  {k:"fullName",l:"Full legal name"},{k:"dob",l:"Date of birth",t:"date"},
+  {k:"mobile",l:"Mobile",t:"tel"},{k:"emergNo",l:"Emergency number where I live"},
+  {k:"address",l:"Home address",w:1,t:"textarea"},{k:"country",l:"Country I live in"},
+  {k:"idLoc",l:"Where my ID and passport are kept"},
+  {k:"blood",l:"Blood type",t:"select",o:["Not sure","A+","A-","B+","B-","AB+","AB-","O+","O-"]},{k:"allergies",l:"Allergies and reactions"},
+  {k:"conditions",l:"Ongoing health conditions",w:1,t:"textarea"},
+  {k:"gp",l:"My doctor (name and practice)"},{k:"gpPhone",l:"Doctor's phone",t:"tel"},
+  {k:"insurer",l:"Medical aid / health insurer"},{k:"insurerNo",l:"Membership number, or where the card is"}
+ ]};
+function famData(){return (st.l.fam||[]).filter(function(r){return Object.keys(r).some(function(k){return k!=="rel"&&String(r[k]||"").trim();});});}
+var FIND_LISTS=[["docs","item"],["wills",function(r){return r.kind?r.kind+(r.country?" ("+r.country+")":""):"";}],["meds","name"],["aid","item"],["keys","item"],["moneyPlaces","item"],["devices","item"]];
 function findData(){
   var groups={},total=0,placed=0,unplaced=[];
   PLACES.forEach(function(p){groups[p]=[];});
   FIND_LISTS.forEach(function(L){(st.l[L[0]]||[]).forEach(function(r){
-    var name=r[L[1]];if(!name)return;
+    var name=typeof L[1]==="function"?L[1](r):r[L[1]];if(!name)return;
     if(!r.place&&!r.spot)return;
     total++;
     if(r.place){placed++;groups[r.place].push({n:name,s:r.spot||""});}else unplaced.push({n:name,s:r.spot||""});
@@ -600,7 +688,8 @@ function tonightHTML(){
   h+='<div class="card"><h4><span class="dot"></span>The Drawer Card</h4><dl class="kv"><dt>Name</dt><dd>'+v("fullName")+'</dd><dt>Address</dt><dd>'+v("address")+'</dd><dt>Emergency no.</dt><dd>'+v("emergNo")+'</dd><dt>Blood type</dt><dd>'+v("blood")+'</dd><dt>Allergies</dt><dd>'+v("allergies")+'</dd><dt>Doctor</dt><dd>'+v("gp")+' '+esc(st.f.gpPhone||"")+'</dd></dl></div>';
   h+='<div class="card"><h4><span class="dot"></span>Call first, in this order</h4>'+(d.calls.length?'<ol style="margin:0;padding-left:18px">'+d.calls.map(function(r){return '<li><b>'+esc(r.name)+'</b>'+(r.rel?' ('+esc(r.rel)+')':'')+' '+esc(r.phone||"")+'</li>';}).join("")+'</ol>':'<p class="miss">Add your call list in Drawer 1.</p>')+
      (d.meds.length?'<p style="margin-top:10px"><b>Medicines:</b> '+d.meds.map(function(r){return esc(r.name)+(r.str?' '+esc(r.str):'');}).join(", ")+'</p>':'')+'</div>';
-  h+='</div>';
+  famData().forEach(function(r){h+='<div class="card"><h4><span class="dot" style="background:var(--sage)"></span>'+esc(r.name||"Person")+(r.rel?' ('+esc(r.rel)+')':'')+'</h4><dl class="kv"><dt>Mobile</dt><dd>'+esc(r.mobile||"")+'</dd><dt>Lives in</dt><dd>'+esc(r.country||"")+'</dd><dt>Blood type</dt><dd>'+esc(r.blood||"")+'</dd><dt>Allergies</dt><dd>'+esc(r.allergies||"")+'</dd><dt>Medicines</dt><dd>'+esc(r.meds||"")+'</dd><dt>Doctor</dt><dd>'+esc(r.gp||"")+'</dd></dl></div>';});
+  h+='</div><p style="margin:-6px 0 18px"><button class="btn sm" data-go="s1">&#9998; Edit the Drawer Card and people</button></p>';
   h+='<div class="stat"><span class="chip gold">'+f.placed+' things placed</span>'+(f.unplaced.length?'<span class="chip">'+f.unplaced.length+' still need a place</span>':'')+'<span class="chip">'+f.house.length+' shut-offs and safety items</span></div>';
   var boxes=PLACES.filter(function(p){return f.groups[p].length;}).map(function(p){return placeBox(p,f.groups[p]);});
   if(f.house.length)boxes.unshift(placeBox("Around the house: shut-offs and safety",f.house));
@@ -659,7 +748,9 @@ function openDlg(id){
 ["sName","sFor","sPaper","sText","sTheme"].forEach(function(id){
   $(id).addEventListener(id==="sName"?"input":"change",function(){
     var map={sName:"name",sFor:"forWhom",sPaper:"paper",sText:"text",sTheme:"theme"};
-    st.settings[map[id]]=this.value;applySettings();save();if(id==="sFor"||id==="sName"){buildNav();render();}
+    st.settings[map[id]]=this.value;
+    if(id==="sFor"&&this.value==="partner"&&!(st.l.fam||[]).some(function(r){return r.rel==="Partner / spouse";})){(st.l.fam=st.l.fam||[]).unshift({rel:"Partner / spouse"});}
+    applySettings();save();if(id==="sFor"||id==="sName"){buildNav();render();}
   });
 });
 function applySettings(){
@@ -688,7 +779,7 @@ $("fImport").onchange=function(){
       if(!d||typeof d!=="object"||!(d.f||d.l))throw 0;
       $("dBackup").close();
       ask("Replace what is on this device with the backup from "+(j.saved?new Date(j.saved).toLocaleDateString():"this file")+"?",function(){
-      st={v:VERSION,settings:{name:"",forWhom:"me",paper:"A4",text:"16",theme:"light"},f:{},l:{},c:{},cn:{},meta:{}};merge(d);seedLists();
+      st={v:VERSION,settings:{name:"",forWhom:"me",paper:"A4",text:"16",theme:"light"},f:{},l:{},c:{},cn:{},meta:{}};merge(d);migrate();seedLists();
       applySettings();save();buildNav();render();toast("Backup restored");
       });
     }catch(e){toast("That file is not a Kitchen Drawer File backup");}
@@ -697,11 +788,78 @@ $("fImport").onchange=function(){
 $("bWipe").onclick=function(){
   $("dBackup").close();
   ask("Clear everything in this file on this device? This cannot be undone. Save a backup first if you may need it.",function(){
-  try{localStorage.removeItem(KEY);}catch(e){}
   st={v:VERSION,settings:{name:"",forWhom:"me",paper:"A4",text:"16",theme:"light"},f:{},l:{},c:{},cn:{},meta:{}};seedLists();
+  try{if(FILLED)localStorage.setItem(KEY,JSON.stringify(st));else localStorage.removeItem(KEY);}catch(e){}
   applySettings();buildNav();cur="start";render();toast("Cleared");
   });
 };
+
+/* ---------- Share: PDF, filled copy, iPhone ZIP ---------- */
+function product(){var h=document.querySelector(".brand h1");return h?h.textContent.trim():"Family File";}
+function slug(x){return String(x||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);}
+function who(){return (st.settings.name||st.f.fullName||"").trim();}
+function today(){return new Date().toISOString().slice(0,10);}
+function copyName(ext){var w=slug(who());return slug(product())+(w?"-"+w:"")+"-"+today()+ext;}
+function download(blob,name){
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;
+  document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
+}
+var SC="scr"+"ipt";
+function filledHTML(){
+  var payload={copyId:Date.now().toString(36)+Math.random().toString(36).slice(2,8),made:new Date().toISOString(),from:who(),product:product(),data:st};
+  var json=JSON.stringify(payload).replace(/</g,"\\u003c");
+  var old=new RegExp("<"+SC+" type=\"application/json\" id=\"filledData\">[\\s\\S]*?</"+SC+">\\s*");
+  var src=PRISTINE.replace(old,"");
+  var mark="<"+SC+">\n(function(){";
+  var i=src.lastIndexOf(mark);
+  if(i<0)throw new Error("source");
+  return src.slice(0,i)+"<"+SC+" type=\"application/json\" id=\"filledData\">"+json+"</"+SC+">\n"+src.slice(i);
+}
+var CRC=(function(){var t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+function crc32(u){var c=0xFFFFFFFF;for(var i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function makeZip(files){
+  var enc=new TextEncoder(),parts=[],central=[],off=0,d=new Date();
+  var tm=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1),dt=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate();
+  files.forEach(function(f){
+    var nm=enc.encode(f.name),data=f.data,crc=crc32(data),sz=data.length;
+    var h=new DataView(new ArrayBuffer(30));
+    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,0,true);h.setUint16(10,tm,true);h.setUint16(12,dt,true);
+    h.setUint32(14,crc,true);h.setUint32(18,sz,true);h.setUint32(22,sz,true);h.setUint16(26,nm.length,true);h.setUint16(28,0,true);
+    parts.push(new Uint8Array(h.buffer),nm,data);
+    var c=new DataView(new ArrayBuffer(46));
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,0,true);c.setUint16(12,tm,true);c.setUint16(14,dt,true);
+    c.setUint32(16,crc,true);c.setUint32(20,sz,true);c.setUint32(24,sz,true);c.setUint16(28,nm.length,true);c.setUint16(30,0,true);c.setUint16(32,0,true);
+    c.setUint16(34,0,true);c.setUint16(36,0,true);c.setUint32(38,0,true);c.setUint32(42,off,true);
+    central.push(new Uint8Array(c.buffer),nm);
+    off+=30+nm.length+sz;
+  });
+  var cd=central.reduce(function(a,b){return a+b.length;},0),e=new DataView(new ArrayBuffer(22));
+  e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cd,true);e.setUint32(16,off,true);
+  return new Blob(parts.concat(central,[new Uint8Array(e.buffer)]),{type:"application/zip"});
+}
+var IPHONE_STEPS=["How to open this file on an iPhone or iPad","",
+ "1. In WhatsApp, tap the ZIP file. Tap the Share icon (a box with an arrow pointing up) and choose Save to Files.",
+ "2. Open the Files app and tap the ZIP file. It opens into a folder.",
+ "3. Open the folder and tap the file that ends in .html.",
+ "4. If the buttons do not work, tap the Share icon and choose Open in Safari.",
+ "5. Everything is already filled in. Changes you make save only on that iPhone. Use Share & Backup in the file to save a backup or a PDF.","",
+ "Do not use the file inside the WhatsApp preview. iPhones block the buttons there.",""].join("\r\n");
+$("bPdf").onclick=function(){$("dBackup").close();doPrint($("pdfScope").value);};
+$("bCopy").onclick=function(){
+  try{download(new Blob([filledHTML()],{type:"text/html"}),copyName(".html"));toast("Filled copy saved. Send it on WhatsApp or email.");}
+  catch(e){toast("Could not make the filled copy. Please save a backup file instead.");}
+};
+$("bZip").onclick=function(){
+  try{var enc=new TextEncoder(),base=copyName("");
+    var z=makeZip([{name:base+".html",data:enc.encode(filledHTML())},{name:"How to open on iPhone.txt",data:enc.encode(IPHONE_STEPS)}]);
+    download(z,base+"-iPhone.zip");toast("iPhone ZIP saved. Send it on WhatsApp.");}
+  catch(e){toast("Could not make the ZIP. Please save a filled copy instead.");}
+};
+function copyNote(){
+  if(!FILLED)return "";
+  var dt="";try{dt=new Date(FILLED.made).toLocaleDateString();}catch(e){}
+  return '<div class="note sun copynote"><b>Filled copy</b> '+(FILLED.from?'from '+esc(FILLED.from)+', ':'')+'made on '+esc(dt)+'. Changes you make save only on this device. To send changes back, tap Share &amp; Backup and save a new filled copy.</div>';
+}
 
 /* ---------- Print binder ---------- */
 function doPrint(scope){
@@ -727,6 +885,11 @@ function buildPrint(scope){
       if(g.g==="list"){
         var rows=blank?(g.seed?g.seed.map(function(s){return {item:s};}):[]):(st.l[g.key]||[]).filter(function(r){return Object.keys(r).some(function(k){return String(r[k]||"").trim();});});
         var extra=blank?Math.max(4,8-rows.length):2;
+        if(g.fields.length>5){
+          var cl=rows.slice();if(blank||!cl.length)cl=cl.concat(blank?[{},{}]:[{}]);
+          h+=cl.map(function(r){return '<div class="pcard"><table class="pkv">'+g.fields.map(function(f){return '<tr><td>'+esc(f.l)+'</td><td>'+esc(f.t==="date"?fmtDate(r[f.k]):(r[f.k]||""))+'</td></tr>';}).join("")+'</table></div>';}).join("");
+          return;
+        }
         var pf=g.fields.slice(0,5);
         h+='<table class="ptbl"><thead><tr>'+pf.map(function(f){return '<th>'+esc(f.l)+'</th>';}).join("")+'</tr></thead><tbody>'+
           rows.map(function(r){return '<tr>'+pf.map(function(f){return '<td>'+esc(r[f.k]||"")+'</td>';}).join("")+'</tr>';}).join("")+
@@ -739,15 +902,22 @@ function buildPrint(scope){
   });
   return out;
 }
+function famPrint(){
+  var fam=famData();if(!fam.length)return "";
+  return '<h3 class="ph3">Other people in this file</h3><div class="pgrid">'+fam.map(function(r){
+    function x(k){return esc(r[k]||"")||"______";}
+    return '<div class="pbox"><h4>'+x("name")+(r.rel?' ('+esc(r.rel)+')':'')+'</h4><p>Born: '+(esc(fmtDate(r.dob))||"______")+' &middot; Mobile: '+x("mobile")+'</p><p>Lives in: '+x("country")+' &middot; ID kept: '+x("idLoc")+'</p><p>Blood type: '+x("blood")+' &middot; Allergies: '+x("allergies")+'</p><p>Conditions: '+x("conditions")+'</p><p>Medicines: '+x("meds")+'</p><p>Doctor: '+x("gp")+'</p><p>Cover: '+x("insurer")+'</p></div>';
+  }).join("")+'</div>';
+}
 function tonightPrint(){
   var d=tonightData(),f=findData();
   function pvv(k){return esc(st.f[k]||"")||"______________";}
   var h='<div class="pp"><span class="ptab">Keep in the kitchen drawer</span><h2 class="ph2">The Drawer Card'+(st.settings.name?' - '+esc(st.settings.name):'')+'</h2><p class="plead">If something happens, start here. Find It Fast follows on this page.</p><div class="pgrid">';
-  h+='<div class="pbox"><h4>Who lives here</h4><p>'+pvv("fullName")+'</p><p>Address: '+pvv("address")+'</p><p>Mobile: '+pvv("mobile")+'</p><p><b>Emergency number: '+pvv("emergNo")+'</b></p></div>';
-  h+='<div class="pbox"><h4>Call first, in this order</h4><ol style="margin:0;padding-left:5mm">'+(d.calls.length?d.calls.map(function(r){return '<li>'+esc(r.name)+(r.rel?' ('+esc(r.rel)+')':'')+' '+esc(r.phone||"")+'</li>';}).join(""):'<li>______________</li><li>______________</li><li>______________</li>')+'</ol></div>';
+  h+='<div class="pbox"><h4>Who lives here</h4><p>'+pvv("fullName")+'</p><p>Address: '+pvv("address")+(st.f.country?', '+esc(st.f.country):'')+'</p><p>Mobile: '+pvv("mobile")+'</p><p><b>Emergency number: '+pvv("emergNo")+'</b></p></div>';
+  h+='<div class="pbox"><h4>Call first, in this order</h4><ol style="margin:0;padding-left:5mm">'+(d.calls.length?d.calls.map(function(r){return '<li>'+esc(r.name)+(r.rel?' ('+esc(r.rel)+')':'')+' '+esc(r.phone||"")+(r.country?' - '+esc(r.country):'')+'</li>';}).join(""):'<li>______________</li><li>______________</li><li>______________</li>')+'</ol></div>';
   h+='<div class="pbox"><h4>Health</h4><p>Blood type: '+pvv("blood")+'</p><p>Allergies: '+pvv("allergies")+'</p><p>Conditions: '+pvv("conditions")+'</p><p>Doctor: '+pvv("gp")+' '+esc(st.f.gpPhone||"")+'</p><p>Cover: '+pvv("insurer")+'</p></div>';
   h+='<div class="pbox"><h4>Medicines (as on labels)</h4><ul style="margin:0;padding-left:5mm">'+(d.meds.length?d.meds.map(function(r){return '<li>'+esc(r.name)+' '+esc(r.str||"")+(r.when?' - '+esc(r.when):'')+(r.place?' ('+esc(r.place)+')':'')+'</li>';}).join(""):'<li>______________</li>')+'</ul></div>';
-  h+='</div><h3 class="ph3">Find It Fast</h3><div class="pgrid">';
+  h+='</div>'+famPrint()+'<h3 class="ph3">Find It Fast</h3><div class="pgrid">';
   var any=false;
   if(f.house.length){any=true;h+='<div class="pbox"><h4>Around the house: shut-offs and safety</h4><ul style="margin:0;padding-left:5mm">'+f.house.map(function(x){return '<li>'+esc(x.n)+': '+esc(x.s)+'</li>';}).join("")+'</ul></div>';}
   PLACES.forEach(function(p){if(!f.groups[p].length)return;any=true;h+='<div class="pbox"><h4>'+esc(p)+'</h4><ul style="margin:0;padding-left:5mm">'+f.groups[p].map(function(x){return '<li>'+esc(x.n)+(x.s?': '+esc(x.s):'')+'</li>';}).join("")+'</ul></div>';});
